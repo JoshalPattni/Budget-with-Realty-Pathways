@@ -1,76 +1,52 @@
-// Step 1: Calculate Monthly Income
+// Function to calculate the estimated monthly income
 function calculateMonthlyIncome() {
     var annualIncome = parseFloat(document.getElementById('annualIncome').value);
-    var taxRate = getTaxRate(annualIncome);
-    var monthlyIncome = annualIncome / 12 * (1 - taxRate);
-    document.getElementById('monthlyIncome').innerText = 'Estimated Monthly Income: £' + monthlyIncome.toFixed(2);
+    var monthlyIncome = (annualIncome / 12).toFixed(2);
+    document.getElementById('monthlyIncome').textContent = 'Estimated Monthly Income: £' + monthlyIncome;
 }
 
-function getTaxRate(income) {
-    if (income <= 12570) {
-        return 0;
-    } else if (income <= 50270) {
-        return 0.20;
-    } else if (income <= 125140) {
-        return 0.40;
-    } else {
-        return 0.45;
-    }
-}
-
-// Step 2: Calculate Total Monthly Expenses
+// Function to calculate the total monthly expenses
 function calculateTotalExpenses() {
-    var expenseInputs = document.querySelectorAll('#expenses input[type="number"]');
+    var expenses = document.querySelectorAll('.expense');
     var totalExpenses = 0;
-    expenseInputs.forEach(function(input) {
-        totalExpenses += parseFloat(input.value);
+    expenses.forEach(function (expense) {
+        var expenseAmount = parseFloat(expense.querySelector('input[type="number"]').value);
+        totalExpenses += isNaN(expenseAmount) ? 0 : expenseAmount;
     });
-    document.getElementById('totalExpenses').innerText = 'Total Monthly Expenses: £' + totalExpenses.toFixed(2);
+    document.getElementById('totalExpenses').textContent = 'Total Monthly Expenses: £' + totalExpenses.toFixed(2);
 }
 
-// Step 3: Calculate Leftover Amount and Savings Target
-function calculateLeftoverAndSavings() {
-    var monthlyIncome = parseFloat(document.getElementById('monthlyIncome').innerText.split('£')[1]);
-    var totalExpenses = parseFloat(document.getElementById('totalExpenses').innerText.split('£')[1]);
-    var leftoverAmount = monthlyIncome - totalExpenses;
-    document.getElementById('leftoverAmount').innerText = 'What You\'re Left With: £' + leftoverAmount.toFixed(2);
+// Function to calculate what's left after deducting expenses from income
+function calculateLeftOver() {
+    var monthlyIncome = parseFloat(document.getElementById('monthlyIncome').textContent.split('£')[1]);
+    var totalExpenses = parseFloat(document.getElementById('totalExpenses').textContent.split('£')[1]);
+    var leftOver = monthlyIncome - totalExpenses;
+    document.getElementById('leftOver').textContent = 'What\'s Left: £' + leftOver.toFixed(2);
     var savingsPercentage = parseFloat(document.getElementById('savingsPercentage').value);
-    var monthlySavingsTarget = leftoverAmount * (savingsPercentage / 100);
-    document.getElementById('monthlySavingsTarget').value = monthlySavingsTarget.toFixed(2);
+    var monthlySavingsTarget = (leftOver * (savingsPercentage / 100)).toFixed(2);
+    document.getElementById('savingsTarget').textContent = 'Monthly Savings Target: £' + monthlySavingsTarget;
 }
 
-// Step 4: Calculate Time to Save for Deposit
-function calculateTimeToSave() {
-    var monthlySavingsTarget = parseFloat(document.getElementById('monthlySavingsTarget').value);
+// Function to calculate the time required to save for the deposit
+function calculateSavingsTarget() {
     var propertyCost = parseFloat(document.getElementById('propertyCost').value);
-    var depositPercentage = document.querySelector('input[name="deposit"]:checked').value;
-    var depositAmount = propertyCost * depositPercentage;
-    var monthsToSave = Math.ceil(depositAmount / monthlySavingsTarget);
-    document.getElementById('monthsToSave').innerText = 'Months to Save for Deposit: ' + monthsToSave;
+    var monthlySavingsTarget = parseFloat(document.getElementById('savingsTarget').textContent.split('£')[1]);
+    var monthsToSave = Math.ceil(propertyCost / monthlySavingsTarget);
+    document.getElementById('monthsToSave').textContent = 'Months to Save: ' + monthsToSave;
 }
 
-// Step 5: Track Monthly Savings
+// Function to fill the savings bucket and track progress
 function fillBucket() {
-    var monthlySavings = parseFloat(document.getElementById('monthlySavings').value);
-    var propertyCost = parseFloat(document.getElementById('propertyCost').value);
-    var depositPercentage = document.querySelector('input[name="deposit"]:checked').value;
-    var depositAmount = propertyCost * depositPercentage;
-    var monthsToSave = Math.ceil(depositAmount / monthlySavings);
-    var currentMonth = parseInt(document.getElementById('currentMonth').innerText);
-    if (currentMonth <= monthsToSave) {
-        var progress = (currentMonth / monthsToSave) * 100;
-        document.getElementById('savingsBucket').style.width = progress + '%';
-        document.getElementById('currentMonth').innerText = currentMonth + 1;
-        if (progress >= 25 && progress < 50) {
-            alert('Congratulations! You\'ve saved 25% of your deposit goal.');
-        } else if (progress >= 50 && progress < 75) {
-            alert('Halfway there! You\'ve saved 50% of your deposit goal.');
-        } else if (progress >= 75 && progress < 100) {
-            alert('Almost there! You\'ve saved 75% of your deposit goal.');
-        } else if (progress >= 100) {
-            alert('Congratulations! You\'ve reached your deposit goal!');
-        }
-    } else {
-        alert('You\'ve reached the maximum number of months allowed.');
+    var savingsAmount = parseFloat(document.getElementById('savingsAmount').value);
+    var savingsBucket = document.getElementById('savingsBucket');
+    var bucketProgress = document.getElementById('bucketProgress');
+    var currentProgress = parseFloat(bucketProgress.textContent.split(':')[1].trim());
+    currentProgress += (savingsAmount / 1000) * 100; // Assuming 1000 is the target amount
+    if (currentProgress > 100) {
+        currentProgress = 100;
     }
+    bucketProgress.textContent = 'Bucket filled: ' + currentProgress.toFixed(2) + '%';
 }
+
+// Add more JavaScript functions as needed
+
