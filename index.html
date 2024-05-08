@@ -18,17 +18,28 @@
             <p class="result" id="monthlyIncome"></p>
         </div>
         
-        <!-- Step 2: Monthly Expenses -->
-        <div class="step">
-            <h2>Step 2: Monthly Expenses</h2>
-            <p>Add your monthly expenses:</p>
-            <div id="expenses">
-                <!-- Expenses will be dynamically added here -->
-            </div>
-            <button onclick="addExpense()">Add Expense</button>
-            <button onclick="calculateTotalExpenses()">Calculate Total Expenses</button>
-            <p class="result" id="totalExpenses"></p>
+       <!-- Step 2: Monthly Expenses -->
+<div id="step2" class="step">
+    <h2>Step 2: Monthly Expenses</h2>
+    <p>Enter your monthly expenses below:</p>
+    <div id="expenses">
+        <div class="expense">
+            <input type="text" placeholder="Expense Name">
+            <input type="number" placeholder="Expense Amount (£)">
         </div>
+        <div class="expense">
+            <input type="text" placeholder="Expense Name">
+            <input type="number" placeholder="Expense Amount (£)">
+        </div>
+        <div class="expense">
+            <input type="text" placeholder="Expense Name">
+            <input type="number" placeholder="Expense Amount (£)">
+        </div>
+        <!-- Add more expense inputs if needed -->
+    </div>
+    <button onclick="calculateTotalExpenses()">Calculate Total Expenses</button>
+    <p id="totalExpenses">Total Monthly Expenses: £0.00</p>
+</div>
 
         <!-- Step 3: What You're Left With -->
         <div class="step">
