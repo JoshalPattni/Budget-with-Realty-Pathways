@@ -1,7 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #303030;
-    color: #fff;
+    background-color: #f0f0f0;
     margin: 0;
     padding: 0;
 }
@@ -10,47 +9,45 @@ body {
     max-width: 800px;
     margin: 50px auto;
     padding: 20px;
-    background-color: #1f1f1f;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
     text-align: center;
+    color: #000;
 }
 
-.step-description {
-    font-weight: bold;
-    margin-top: 20px;
+.step {
+    margin-bottom: 30px;
 }
 
-.sub-description {
-    font-style: italic;
-    margin-top: 10px;
+.step h2 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 10px;
 }
 
 label {
     display: block;
-    margin-top: 10px;
+    margin-bottom: 5px;
 }
 
-input[type="number"] {
-    width: 100%;
+input[type="number"],
+input[type="text"],
+button {
+    margin-bottom: 10px;
     padding: 8px;
-    margin-top: 5px;
+    width: 100%;
+    box-sizing: border-box;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 4px;
 }
 
 button {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    margin-top: 20px;
     background-color: #007bff;
     color: #fff;
-    border: none;
-    border-radius: 5px;
     cursor: pointer;
 }
 
@@ -59,6 +56,40 @@ button:hover {
 }
 
 .result {
-    margin-top: 20px;
     font-weight: bold;
+    margin-top: 10px;
+}
+
+#expenses {
+    margin-bottom: 10px;
+}
+
+#expenses input[type="text"],
+#expenses input[type="number"] {
+    width: 40%;
+    margin-right: 10px;
+}
+
+#expenses button {
+    width: auto;
+    margin-top: 10px;
+}
+
+#savingsBucket {
+    width: 100%;
+    height: 20px;
+    background-color: #ccc;
+    border-radius: 4px;
+    margin-top: 10px;
+    position: relative;
+}
+
+#savingsBucket .fill {
+    width: 0;
+    height: 100%;
+    background-color: #007bff;
+    border-radius: 4px;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
