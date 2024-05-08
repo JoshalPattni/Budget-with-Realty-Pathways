@@ -1,47 +1,76 @@
-// Function to calculate the monthly income
+// Step 1: Calculate Monthly Income
 function calculateMonthlyIncome() {
-    const annualIncome = parseFloat(document.getElementById("annualIncome").value);
-    const monthlyIncome = (annualIncome / 12).toFixed(2);
-    document.getElementById("monthlyIncome").innerHTML = "Estimated Monthly Income: £" + monthlyIncome;
+    var annualIncome = parseFloat(document.getElementById('annualIncome').value);
+    var taxRate = getTaxRate(annualIncome);
+    var monthlyIncome = annualIncome / 12 * (1 - taxRate);
+    document.getElementById('monthlyIncome').innerText = 'Estimated Monthly Income: £' + monthlyIncome.toFixed(2);
 }
 
-// Function to calculate the total monthly expenses
+function getTaxRate(income) {
+    if (income <= 12570) {
+        return 0;
+    } else if (income <= 50270) {
+        return 0.20;
+    } else if (income <= 125140) {
+        return 0.40;
+    } else {
+        return 0.45;
+    }
+}
+
+// Step 2: Calculate Total Monthly Expenses
 function calculateTotalExpenses() {
-    let totalExpenses = 0;
-    document.querySelectorAll('input[type="number"]').forEach(input => {
+    var expenseInputs = document.querySelectorAll('#expenses input[type="number"]');
+    var totalExpenses = 0;
+    expenseInputs.forEach(function(input) {
         totalExpenses += parseFloat(input.value);
     });
-    document.getElementById("totalExpenses").innerHTML = "Total Monthly Expenses: £" + totalExpenses.toFixed(2);
+    document.getElementById('totalExpenses').innerText = 'Total Monthly Expenses: £' + totalExpenses.toFixed(2);
 }
 
-// Function to calculate the total savings based on the percentage
-function calculateTotalSavings() {
-    const leftover = parseFloat(document.getElementById("leftover").innerHTML);
-    const savingsPercentage = parseFloat(document.getElementById("savingsPercentage").value);
-    const totalSavings = (leftover * (savingsPercentage / 100)).toFixed(2);
-    document.getElementById("totalSavings").innerHTML = "Total Savings: £" + totalSavings;
+// Step 3: Calculate Leftover Amount and Savings Target
+function calculateLeftoverAndSavings() {
+    var monthlyIncome = parseFloat(document.getElementById('monthlyIncome').innerText.split('£')[1]);
+    var totalExpenses = parseFloat(document.getElementById('totalExpenses').innerText.split('£')[1]);
+    var leftoverAmount = monthlyIncome - totalExpenses;
+    document.getElementById('leftoverAmount').innerText = 'What You\'re Left With: £' + leftoverAmount.toFixed(2);
+    var savingsPercentage = parseFloat(document.getElementById('savingsPercentage').value);
+    var monthlySavingsTarget = leftoverAmount * (savingsPercentage / 100);
+    document.getElementById('monthlySavingsTarget').value = monthlySavingsTarget.toFixed(2);
 }
 
-// Function to calculate the time required to save for the deposit
+// Step 4: Calculate Time to Save for Deposit
 function calculateTimeToSave() {
-    const propertyCost = parseFloat(document.getElementById("propertyCost").value);
-    const savingsTarget = parseFloat(document.getElementById("monthlySavingsTarget").value);
-
-    const depositPercentage = document.querySelector('input[name="depositType"]:checked').value === "residential" ? 0.1 : 0.2;
-
-    const depositAmount = propertyCost * depositPercentage;
-
-    const monthsToSave = Math.ceil(depositAmount / savingsTarget);
-
-    document.getElementById("monthsToSave").innerHTML = "Months to Save: " + monthsToSave;
+    var monthlySavingsTarget = parseFloat(document.getElementById('monthlySavingsTarget').value);
+    var propertyCost = parseFloat(document.getElementById('propertyCost').value);
+    var depositPercentage = document.querySelector('input[name="deposit"]:checked').value;
+    var depositAmount = propertyCost * depositPercentage;
+    var monthsToSave = Math.ceil(depositAmount / monthlySavingsTarget);
+    document.getElementById('monthsToSave').innerText = 'Months to Save for Deposit: ' + monthsToSave;
 }
 
-// Function to calculate the percentage of total budget saved
-function calculateSavingsProgress() {
-    const totalSavings = parseFloat(document.getElementById("totalSavings").value);
-    const propertyCost = parseFloat(document.getElementById("propertyCost").value);
-
-    const savingsPercentage = (totalSavings / propertyCost) * 100;
-
-    document.getElementById("savingsProgress").innerHTML = "Savings Progress: " + savingsPercentage.toFixed(2) + "%";
+// Step 5: Track Monthly Savings
+function fillBucket() {
+    var monthlySavings = parseFloat(document.getElementById('monthlySavings').value);
+    var propertyCost = parseFloat(document.getElementById('propertyCost').value);
+    var depositPercentage = document.querySelector('input[name="deposit"]:checked').value;
+    var depositAmount = propertyCost * depositPercentage;
+    var monthsToSave = Math.ceil(depositAmount / monthlySavings);
+    var currentMonth = parseInt(document.getElementById('currentMonth').innerText);
+    if (currentMonth <= monthsToSave) {
+        var progress = (currentMonth / monthsToSave) * 100;
+        document.getElementById('savingsBucket').style.width = progress + '%';
+        document.getElementById('currentMonth').innerText = currentMonth + 1;
+        if (progress >= 25 && progress < 50) {
+            alert('Congratulations! You\'ve saved 25% of your deposit goal.');
+        } else if (progress >= 50 && progress < 75) {
+            alert('Halfway there! You\'ve saved 50% of your deposit goal.');
+        } else if (progress >= 75 && progress < 100) {
+            alert('Almost there! You\'ve saved 75% of your deposit goal.');
+        } else if (progress >= 100) {
+            alert('Congratulations! You\'ve reached your deposit goal!');
+        }
+    } else {
+        alert('You\'ve reached the maximum number of months allowed.');
+    }
 }
