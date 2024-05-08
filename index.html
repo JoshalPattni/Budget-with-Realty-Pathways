@@ -9,52 +9,60 @@
 <body>
     <div class="container">
         <h1>Realty Pathways Budget Saving Tool</h1>
-        <p class="step-description">Step 1: Calculate Your Monthly Income</p>
-        <label for="annualIncome">Enter Your Annual Income (£):</label>
-        <input type="number" id="annualIncome">
-        <button onclick="calculateMonthlyIncome()">Calculate Monthly Income</button>
-        <p class="result" id="monthlyIncome"></p>
+        <!-- Step 1: Calculate Your Monthly Income -->
+        <div class="step">
+            <h2>Step 1: Calculate Your Monthly Income</h2>
+            <label for="annualIncome">Enter Your Annual Income (£):</label>
+            <input type="number" id="annualIncome">
+            <button onclick="calculateMonthlyIncome()">Calculate Monthly Income</button>
+            <p class="result" id="monthlyIncome"></p>
+        </div>
         
         <!-- Step 2: Monthly Expenses -->
-        <p class="step-description">Step 2: Monthly Expenses</p>
-        <p class="sub-description">Enter your monthly expenses below:</p>
-        <div id="expenseInputs"></div>
-        <button onclick="calculateTotalExpenses()">Calculate Total Expenses</button>
-        <p class="result" id="totalExpenses"></p>
-        
-        <!-- Step 3: Savings Goals -->
-        <p class="step-description">Step 3: Savings Goals</p>
-        <p class="sub-description">Calculate what you're left with after expenses:</p>
-        <p class="sub-description">Then choose what percentage of that you'd like to save each month:</p>
-        <p>What You're Left With: £<span id="leftover"></span></p>
-        <label for="savingsPercentage">Savings Percentage (%):</label>
-        <input type="number" id="savingsPercentage" min="0" max="100">
-        <button onclick="calculateTotalSavings()">Calculate Total Savings</button>
-        <p class="result" id="totalSavings"></p>
-        
+        <div class="step">
+            <h2>Step 2: Monthly Expenses</h2>
+            <p>Add your monthly expenses:</p>
+            <div id="expenses">
+                <!-- Expenses will be dynamically added here -->
+            </div>
+            <button onclick="addExpense()">Add Expense</button>
+            <button onclick="calculateTotalExpenses()">Calculate Total Expenses</button>
+            <p class="result" id="totalExpenses"></p>
+        </div>
+
+        <!-- Step 3: What You're Left With -->
+        <div class="step">
+            <h2>Step 3: What You're Left With</h2>
+            <p>This is what's left after deducting expenses:</p>
+            <p>Total Monthly Income: <span id="totalMonthlyIncome"></span></p>
+            <p>Total Monthly Expenses: <span id="totalMonthlyExpenses"></span></p>
+            <p>Percentage of Income to Save:</p>
+            <input type="number" id="savingsPercentage" min="0" max="100" placeholder="Enter %">
+            <button onclick="calculateSavings()">Calculate Savings</button>
+            <p class="result" id="monthlySavings"></p>
+        </div>
+
         <!-- Step 4: Calculate Your Savings Target -->
-        <p class="step-description">Step 4: Calculate Your Savings Target</p>
-        <label for="monthlySavingsTarget">Monthly Savings Target (£):</label>
-        <input type="number" id="monthlySavingsTarget">
-        <label for="propertyCost">Property Cost (£):</label>
-        <input type="number" id="propertyCost">
-        <p>Are you buying the property to live in?</p>
-        <label><input type="radio" name="depositType" value="residential"> Yes</label>
-        <label><input type="radio" name="depositType" value="buyToLet"> No</label>
-        <button onclick="calculateTimeToSave()">Calculate Time to Save</button>
-        <p class="result" id="monthsToSave"></p>
+        <div class="step">
+            <h2>Step 4: Calculate Your Savings Target</h2>
+            <label for="propertyCost">Property Cost (£):</label>
+            <input type="number" id="propertyCost">
+            <p>Are you buying the property to live in?</p>
+            <label><input type="radio" name="depositType" value="residential"> Yes</label>
+            <label><input type="radio" name="depositType" value="buyToLet"> No</label>
+            <button onclick="calculateTimeToSave()">Calculate Time to Save</button>
+            <p class="result" id="monthsToSave"></p>
+        </div>
         
-        <!-- Step 5: Savings Budget Tool -->
-        <p class="step-description">Step 5: Savings Budget Tool</p>
-        <p class="sub-description">Track your monthly savings progress to achieve your deposit target.</p>
-        <label for="totalSavings">Total Savings (£):</label>
-        <input type="number" id="totalSavings">
-        <label for="propertyCost">Property Cost (£):</label>
-        <input type="number" id="propertyCost">
-        <button onclick="calculateSavingsProgress()">Calculate Savings Progress</button>
-        <p class="result" id="savingsProgress"></p>
+        <!-- Step 5: Savings Bucket -->
+        <div class="step">
+            <h2>Step 5: Savings Bucket</h2>
+            <p>Track your savings progress:</p>
+            <input type="number" id="monthlySavings" placeholder="Enter Monthly Savings">
+            <button onclick="fillBucket()">Fill Bucket</button>
+            <div id="savingsBucket"></div>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
 </html>
-
