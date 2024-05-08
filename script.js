@@ -1,48 +1,51 @@
-// Function to calculate the total monthly expenses
+function calculateMonthlyIncome() {
+    var annualIncome = parseFloat(document.getElementById('annualIncome').value);
+    var monthlyIncome = annualIncome / 12;
+    document.getElementById('monthlyIncome').textContent = 'Estimated Monthly Income: £' + monthlyIncome.toFixed(2);
+}
+
+function addExpense() {
+    var expensesDiv = document.getElementById('expenses');
+    var expenseDiv = document.createElement('div');
+    expenseDiv.classList.add('expense');
+    expenseDiv.innerHTML = `
+        <input type="text" placeholder="Expense Name">
+        <input type="number" placeholder="Expense Amount (£)">
+    `;
+    expensesDiv.appendChild(expenseDiv);
+}
+
 function calculateTotalExpenses() {
-    var expenses = document.querySelectorAll('.expense');
+    var expenses = document.querySelectorAll('.expense input[type="number"]');
     var totalExpenses = 0;
     expenses.forEach(function (expense) {
-        var expenseAmount = parseFloat(expense.querySelector('input[type="number"]').value);
+        var expenseAmount = parseFloat(expense.value);
         totalExpenses += isNaN(expenseAmount) ? 0 : expenseAmount;
     });
     document.getElementById('totalExpenses').textContent = 'Total Monthly Expenses: £' + totalExpenses.toFixed(2);
 }
 
-// Function to calculate what's left after deducting expenses from income
-function calculateLeftOver() {
-    var monthlyIncome = parseFloat(document.getElementById('monthlyIncome').textContent.split('£')[1]);
-    var totalExpenses = parseFloat(document.getElementById('totalExpenses').textContent.split('£')[1]);
-    var leftOver = monthlyIncome - totalExpenses;
-    document.getElementById('leftOver').textContent = 'What\'s Left: £' + leftOver.toFixed(2);
-    return leftOver;
-}
-
-// Function to calculate the monthly savings target and fill the savings bucket
 function calculateSavingsTarget() {
-    var leftOver = calculateLeftOver();
+    var leftOver = parseFloat(document.getElementById('leftOver').textContent.split('£')[1]);
     var savingsPercentage = parseFloat(document.getElementById('savingsPercentage').value);
     var monthlySavingsTarget = (leftOver * (savingsPercentage / 100)).toFixed(2);
     document.getElementById('savingsTarget').textContent = 'Monthly Savings Target: £' + monthlySavingsTarget;
-    var savingsAmount = parseFloat(document.getElementById('savingsAmount').value);
-    var savingsBucket = document.getElementById('savingsBucket');
-    var bucketProgress = document.getElementById('bucketProgress');
-    var currentProgress = parseFloat(bucketProgress.textContent.split(':')[1].trim());
-    currentProgress += (savingsAmount / parseFloat(monthlySavingsTarget)) * 100;
-    if (currentProgress > 100) {
-        currentProgress = 100;
-    }
-    bucketProgress.textContent = 'Bucket filled: ' + currentProgress.toFixed(2) + '%';
 }
 
-// Function to track real-life monthly savings progress
+function calculateTimeToSave() {
+    var monthlySavingsTarget = parseFloat(document.getElementById('monthlySavings').value);
+    var propertyCost = parseFloat(document.getElementById('propertyCost').value);
+    var depositPercentage = parseFloat(document.getElementById('depositPercentage').value);
+    var monthsToSave = Math.ceil((propertyCost * depositPercentage - monthlySavingsTarget) / monthlySavingsTarget);
+    document.getElementById('monthsToSave').textContent = 'Months to Save for Deposit: ' + monthsToSave;
+}
+
 function trackSavingsProgress() {
-    var savingsTable = document.getElementById('savingsTable');
+    var totalSavings = 0;
     var monthsToSave = parseInt(document.getElementById('monthsToSave').textContent.split(':')[1].trim());
-    var totalSavings = parseFloat(document.getElementById('totalSavings').value);
     var monthlySavings = parseFloat(document.getElementById('monthlySavings').value);
-    var remainingMonths = monthsToSave;
-    savingsTable.innerHTML = '';
+    var savingsTableBody = document.querySelector('#savingsTable tbody');
+    savingsTableBody.innerHTML = '';
     for (var i = 1; i <= monthsToSave; i++) {
         var row = document.createElement('tr');
         var monthCell = document.createElement('td');
@@ -52,14 +55,10 @@ function trackSavingsProgress() {
         savingsCell.textContent = '£' + monthlySavings.toFixed(2);
         row.appendChild(savingsCell);
         totalSavings += monthlySavings;
-        var remainingCell = document.createElement('td');
-        remainingMonths--;
-        remainingCell.textContent = '£' + (totalSavings - (monthlySavings * i)).toFixed(2);
-        row.appendChild(remainingCell);
-        savingsTable.appendChild(row);
+        var totalSavingsCell = document.createElement('td');
+        totalSavingsCell.textContent = '£' + totalSavings.toFixed(2);
+        row.appendChild(totalSavingsCell);
+        savingsTableBody.appendChild(row);
     }
-    document.getElementById('totalSavings').value = totalSavings.toFixed(2);
-    document.getElementById('remainingMonths').textContent = 'Remaining Months: ' + remainingMonths;
 }
 
-// Add more JavaScript functions as needed
